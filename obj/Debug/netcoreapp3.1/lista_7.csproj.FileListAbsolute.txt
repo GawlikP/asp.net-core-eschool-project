@@ -166,3 +166,5 @@ D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Vie
 D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Views\GradesScale\Edit.cshtml.g.cs
 D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Views\Grades\Create.cshtml.g.cs
 D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Views\Grades\Edit.cshtml.g.cs
+D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Views\Grades\StudentIndex.cshtml.g.cs
+D:\Projects\cs\lista_7_zadanie\lista_7\lista_7\obj\Debug\netcoreapp3.1\Razor\Views\Account\Students.cshtml.g.cs

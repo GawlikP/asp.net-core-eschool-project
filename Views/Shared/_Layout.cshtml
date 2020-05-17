@@ -11,6 +11,15 @@
     <header>
         @using Microsoft.AspNetCore.Http
         @inject IHttpContextAccessor HttpContextAccessor
+        @{ 
+            if(HttpContextAccessor.HttpContext.Session.GetString("Id") == null && HttpContextAccessor.HttpContext.Session.GetString("Logouted") == null)
+            {
+                HttpContextAccessor.HttpContext.Session.SetString("Logouted","Yep");
+                <script>
+                    window.location.href = "/Account/Logout";
+                </script>
+            }
+        }
         <nav class="navbar  navbar-dark bg-dark text-white navbar-expand-sm navbar-toggleable-sm  border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">lista_7</a>
@@ -32,13 +41,46 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Account" asp-action="Addrole">AddRole</a>
-                        </li>
+
                         @if (HttpContextAccessor.HttpContext.Session.GetString("Name") != null)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white">Loged: @HttpContextAccessor.HttpContext.Session.GetString("Name")</a>
+                            </li>
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "User" && HttpContextAccessor.HttpContext.Session.GetString("Id") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Grades" asp-action="StudentIndex" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetString("Id")"></a>
+                            </li>
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin Tools
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Subject" asp-action="Index">Subjects</a>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Accounts">Accounts</a>
+                                    <a class="dropdown-item" asp-controller="Grades" asp-action="Index">Grades</a>
+                                    <a class="dropdown-item" asp-controller="GradesScale" asp-action="Index">GradesScale</a>
+                                    <a class="nav-link text-white" asp-controller="Account" asp-action="Addrole">AddRole</a>
+                                    <div class="dropdown-divider"></div>
+                                </div>
+                            </li>
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Teacher")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Teacher Tools
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Students">Students</a>
+                                    <a class="dropdown-item" asp-controller="Grades" asp-action="Index">Grades</a>
+                                    <div class="dropdown-divider"></div>
+                                </div>
                             </li>
                         }
                     </ul>

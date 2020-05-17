@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using lista_7.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace lista_7.Controllers
 {
+    [Authorize]
     public class GradesController : Controller
     {
         ApplicationDbContext _db;
@@ -16,6 +18,8 @@ namespace lista_7.Controllers
         {
             _db = db;
         }
+        [Authorize]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> Index()
         {
             var grades = await _db.Grades.ToListAsync();
@@ -33,6 +37,8 @@ namespace lista_7.Controllers
 
             return View(grades);
         }
+        [Authorize]
+        [Authorize(Roles = "Teacher,Admin")]
         public IActionResult Create()
         {
             IEnumerable<User> Students = _db.Users.Where(u => u.RoleID == 1);
@@ -46,10 +52,21 @@ namespace lista_7.Controllers
                 students_ids += stud.Id + ",";
                 students_labels += stud.Name + " " + stud.LastName + ",";
             }
-            foreach (var teach in Teachers)
+            if(HttpContext.Session.GetString("Role") == "Teacher")
             {
+                var inid = HttpContext.Session.GetString("Id");
+                var intid = int.Parse(inid);
+                User teach =  _db.Users.Find(intid);
                 teachers_ids += teach.Id + ",";
                 teachers_labels += teach.Name + " " + teach.LastName + ",";
+            }
+            else
+            {
+                foreach (var teach in Teachers)
+                {
+                    teachers_ids += teach.Id + ",";
+                    teachers_labels += teach.Name + " " + teach.LastName + ",";
+                }
             }
             foreach (var sub in Subjects)
             {
@@ -74,6 +91,8 @@ namespace lista_7.Controllers
 
             return View(new Grade());
         }
+        [Authorize]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(Grade grade, int studentId, int teacherId, int subjectId, int scaleId)
         {
@@ -106,10 +125,19 @@ namespace lista_7.Controllers
                 return RedirectToAction("Create");
             }
         }
-
+        [Authorize]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> Edit(int id)
         {
+            
             var gr = await _db.Grades.FindAsync(id);
+            if (HttpContext.Session.GetString("Role") == "Teacher")
+            {
+                if(gr.TecherId.ToString() != HttpContext.Session.GetString("Id"))
+                {
+                    return RedirectToAction("AccessDenied", "Account");
+                }
+            }
             if (gr != null)
             {
                 IEnumerable<User> Students = _db.Users.Where(u => u.RoleID == 1);
@@ -123,10 +151,21 @@ namespace lista_7.Controllers
                     students_ids += stud.Id + ",";
                     students_labels += stud.Name + " " + stud.LastName + ",";
                 }
-                foreach (var teach in Teachers)
+                if (HttpContext.Session.GetString("Role") == "Teacher")
                 {
+                    var inid = HttpContext.Session.GetString("Id");
+                    var intid = int.Parse(inid);
+                    User teach = _db.Users.Find(intid);
                     teachers_ids += teach.Id + ",";
                     teachers_labels += teach.Name + " " + teach.LastName + ",";
+                }
+                else
+                {
+                    foreach (var teach in Teachers)
+                    {
+                        teachers_ids += teach.Id + ",";
+                        teachers_labels += teach.Name + " " + teach.LastName + ",";
+                    }
                 }
                 foreach (var sub in Subjects)
                 {
@@ -160,6 +199,8 @@ namespace lista_7.Controllers
                 return RedirectToAction("Index");
             }
         }
+        [Authorize]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(Grade grade, int studentId, int teacherId, int subjectId, int scaleId)
         {
@@ -196,7 +237,8 @@ namespace lista_7.Controllers
                 return RedirectToAction("Edit");
             }
         }
-        
+        [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var grade = await _db.Grades.FindAsync(id);
@@ -208,5 +250,46 @@ namespace lista_7.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize]
+        [Authorize(Roles = "User,Teacher,Admin")]
+        public async Task<IActionResult> StudentIndex(int id, int SubId)
+        {
+            if(HttpContext.Session.GetString("Role") == "User" && HttpContext.Session.GetString("Id") != id.ToString())
+            {
+                return RedirectToAction("AccessDenied","Account");
+            }
+            
+             IEnumerable<lista_7.Models.Grade> grades;
+
+            if (SubId == 0) grades = await _db.Grades.Where(g => g.StudentId == id).ToListAsync();
+            else grades = await _db.Grades.Where(g => g.StudentId == id && g.SubjectId == SubId).ToListAsync();
+
+            var subj = await _db.Subjects.ToListAsync();
+            String subids = "";
+            String subnames = "";
+            foreach(var s in subj)
+            {
+                subids += s.Id + ",";
+                subnames += s.Name + ",";
+            }
+            ViewData["Subids"] = subids;
+            ViewData["Subnames"] = subnames;
+
+            foreach (var grade in grades)
+            {
+                User student = await _db.Users.FindAsync(grade.StudentId);
+                ViewData["Student" + grade.Id] = student.Name + " " + student.LastName;
+                User teacher = await _db.Users.FindAsync(grade.TecherId);
+                ViewData["Teacher" + grade.Id] = teacher.Name + " " + teacher.LastName;
+                Subject subject = await _db.Subjects.FindAsync(grade.SubjectId);
+                ViewData["Subject" + grade.Id] = subject.Name;
+                GradeScale gradeScale = await _db.GradeScales.FindAsync(grade.gradeScaleId);
+                ViewData["Scale" + grade.Id] = gradeScale.DownBorder + "-" + grade.gradeScale.UpBorder;
+            }
+
+            return View(grades);
+        }
+        
+        
     }
 }

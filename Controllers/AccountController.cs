@@ -231,6 +231,8 @@ namespace lista_7.Controllers
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
             HttpContext.Session.SetString("Name", sr.Username);
+            HttpContext.Session.SetString("Role", role.RoleName);
+            HttpContext.Session.SetString("Id", sr.Id.ToString());
 
             return RedirectToAction("Index", "Home");
         }
@@ -238,7 +240,21 @@ namespace lista_7.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("Name");
+            HttpContext.Session.Remove("Role");
+            HttpContext.Session.Remove("Id");
             return RedirectToAction("Login");
+        }
+        [Authorize]
+        [Authorize(Roles="Teacher, Admin")]
+        public IActionResult Students()
+        {
+                IEnumerable<User> students = _db.Users.Where(u => u.RoleID == 1);
+
+                foreach (var st in students)
+                {
+                    ViewData[st.Id.ToString()] = "Student";
+                }
+            return View(students);
         }
       
         

@@ -32,6 +32,7 @@ namespace lista_7
              .AddCookie();
 
             services.AddSession();
+            
 
             services.AddHttpContextAccessor();
             services.AddControllersWithViews();
@@ -76,7 +77,7 @@ namespace lista_7
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }
