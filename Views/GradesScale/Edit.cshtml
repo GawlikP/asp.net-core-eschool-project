@@ -1,0 +1,55 @@
+﻿@model lista_7.Models.GradeScale
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit GradeScale</h1>
+
+
+<div class="container border">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="UpBorder"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="UpBorder" class="form-control" />
+                <span asp-validation-for="UpBorder" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="DownBorder"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="DownBorder" class="form-control" />
+                <span asp-validation-for="DownBorder" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="AllowHalfGrades"></label>
+            </div>
+            <div class="col-6">
+                <select name="allowHalf" class="form-control">
+                    @if(ViewData["allowHalf"].ToString() == "1")
+                    {
+                        <option selected value="1">Yes</option>
+                        <option value="0">No</option>
+                    }
+                    else
+                    {
+                        <option value="1">Yes</option>
+                        <option selected value="0">No</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <input type="submit" value="Edit" class="btn btn-primary form-control" />
+            </div>
+        </div>
+    </form>

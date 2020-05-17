@@ -1,0 +1,60 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>Students List</h1>
+
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped border">
+        <tr class="table-secondary">
+            <th>
+                <label>Student Nick</label>
+            </th>
+            <th>
+                <label>Student Email</label>
+            </th>
+            <th>
+                <label> Name </label>
+            </th>
+            <th>
+                <label> LastName </label>
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        @foreach (var student in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(m => student.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(m => student.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(m => student.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(m => student.LastName)
+        </td>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+    </tr>
+        }
+    </table> 
+}
+else
+{
+    <p class="badge-dark"><b>None student find</b></p>
+}

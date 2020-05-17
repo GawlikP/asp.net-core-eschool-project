@@ -1,0 +1,32 @@
+﻿@model lista_7.Models.Role;
+@{
+    ViewData["Title"] = "AddRole";
+}
+
+<h1>AddRole</h1>
+
+<div class="container border">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        @Html.ValidationSummary(true)
+        <div class="text-danger">@Html.ValidationMessage("CustomError")</div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="RoleName"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <input type="submit" value="CreateRole" class="btn btn-primary form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

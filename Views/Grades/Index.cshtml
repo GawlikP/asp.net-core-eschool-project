@@ -1,0 +1,53 @@
+﻿@model IEnumerable<lista_7.Models.Grade>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<a class="btn btn-success text-white" asp-controller="Grades" asp-action="Create">Create</a>
+<div class="container border">
+@if(Model.Count() > 0)
+{
+    <table class="table table-striped border">
+        <tr class="table-secondary">
+            <th>
+                <label>Grade</label>
+            </th>
+            <th>
+                <label>Classification</label>
+            </th>
+            <th>
+                <label>Student</label>
+            </th>
+            <th>
+                <label>Teacher</label>
+            </th>
+            <th>
+                <label>Subject</label>
+            </th>
+            <th>
+                <label>Weight</label>
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        @foreach(var gr in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(g=>gr.Number)</td>
+                <td>@Html.DisplayFor(g=>gr.Classification)</td>
+                <td>@ViewData["Student"+gr.Id.ToString()]</td>
+                <td>@ViewData["Teacher"+gr.Id.ToString()]</td>
+                <td>@ViewData["Subject"+gr.Id.ToString()]</td>
+                <td>@Html.DisplayFor(g => gr.Weight)</td>
+                <td>
+                    <button onclick="if(confirm('Are you sure you want to delete?'))location.href='@Url.Action("Delete", "Grades", new { id = gr.Id })'" class="btn btn-danger btn-sm">Delete</button>
+                    <a asp-area="" asp-controller="Grades" asp-action="Edit" asp-route-id="@gr.Id" class="btn btn-success btn-sm text-white">Edit</a>
+                </td>
+            </tr>
+        }
+        
+    </table>
+}
+</div> 

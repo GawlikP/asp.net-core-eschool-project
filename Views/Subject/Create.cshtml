@@ -1,0 +1,45 @@
+﻿@model lista_7.Models.Subject
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Subject</h1>
+
+<div class="container border">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Name"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Teacher"></label>
+            </div>
+            <div class="col-6">
+                <select class="form-control" name="userId" id="userId">
+                    @{
+                        string t = ViewData["Teachers"].ToString();
+                        var temp = t.Split(',');
+                        t = ViewData["Teachers_ids"].ToString();
+                        var temp2 = t.Split(',');
+                        for (int i = 0; i < temp.Length; i++)
+                        {
+                            <option value="@temp2[i]">@temp[i]</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <input type="submit" value="Create" class="btn btn-primary form-control" />
+            </div>
+        </div>
+    </form>
+</div>

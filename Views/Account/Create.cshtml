@@ -1,0 +1,92 @@
+﻿@model lista_7.Models.User
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Account</h1>
+<div class="container border">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="All"></div></br>
+        <div class="text-danger">@ViewData["Error"]</div>
+        <input type="hidden" asp-for="Id"/>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Username"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Email"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div> 
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Name"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="LastName"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Password"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Role"></label>
+            </div>
+            
+            <div class="col-6">
+                <select class="form-control" name="roleName" id="roleName">
+                    @{
+                        string t = ViewData["Roles"].ToString();
+                        var temp = t.Split(',');
+
+                        foreach (var name in temp)
+                        {
+                            if (name == ViewData["ActualRole"])
+                            {
+                                <option selected value="@name">@name</option>
+                            }
+                            else
+                            {
+                                <option  value="@name">@name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-6 offset-3">
+                <input type="submit" value="Edit" class="btn btn-primary form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
