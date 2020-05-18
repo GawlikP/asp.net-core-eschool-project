@@ -258,7 +258,9 @@ namespace lista_7.Controllers
             {
                 return RedirectToAction("AccessDenied","Account");
             }
-            
+
+                var stt = await _db.Users.FindAsync(id);
+
              IEnumerable<lista_7.Models.Grade> grades;
 
             if (SubId == 0) grades = await _db.Grades.Where(g => g.StudentId == id).ToListAsync();
@@ -274,6 +276,7 @@ namespace lista_7.Controllers
             }
             ViewData["Subids"] = subids;
             ViewData["Subnames"] = subnames;
+            ViewData["Student"] = stt.Name + " " + stt.LastName;
 
             foreach (var grade in grades)
             {

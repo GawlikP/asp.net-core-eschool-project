@@ -25,9 +25,7 @@
                 <th>
                     <label>LastName</label>
                 </th>
-                <th>
-                    <label>Password</label>
-                </th>
+               
                 <th>
                     <label>Role</label>
                 </th>
@@ -50,9 +48,7 @@
                     <td>
                         @Html.DisplayFor(m => item.LastName)
                     </td>
-                    <td>
-                        @Html.DisplayFor(m => item.Password)
-                    </td>
+                   
                     <td>
                         @{
                             String role_name = ViewData[item.Id.ToString()].ToString();
